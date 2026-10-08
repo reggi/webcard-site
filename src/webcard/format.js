@@ -151,7 +151,7 @@ export async function validateEntries(entries) {
     previous = instant;
     const expectedID = captureID(new Date(instant));
     if (capture.id !== path.slice('captures/'.length, -5)
-      || !new RegExp(`^${expectedID.replace('.', '\\.')}(?:-[1-9][0-9]*)?$`).test(capture.id)) {
+      || !new RegExp(`^${expectedID.replace('.', '\\.')}(?:-[0-9]+)?$`).test(capture.id)) {
       throw new Error(`Capture timestamp/id mismatch: ${path}`);
     }
     for (const asset of [capture.image, capture.icon].filter(Boolean)) {

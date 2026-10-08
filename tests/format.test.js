@@ -44,6 +44,17 @@ test('timestamp collisions get deterministic suffixes', async () => {
   assert.match(next.current.id, /-1$/);
 });
 
+test('consumer accepts the specification numeric suffix grammar, including zero', async () => {
+  const original = await readArchive(await archive());
+  const id = `${original.current.id}-0`;
+  const path = `captures/${id}.json`;
+  original.entries.delete(original.root.currentCapture);
+  original.entries.set(path, jsonBytes({ ...original.current, id }));
+  original.entries.set('webcard.json', jsonBytes({ ...original.root, currentCapture: path, captures: [path] }));
+  const parsed = await readArchive(await writeArchive(original.entries));
+  assert.equal(parsed.current.id, id);
+});
+
 test('refuses signed refresh and chronological rollback', async () => {
   const first = await readArchive(await archive());
   await assert.rejects(archive({ previous: first, title: 'changed', date: new Date('2025-01-01') }), /precede/);
