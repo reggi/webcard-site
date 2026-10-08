@@ -1,0 +1,6 @@
+/* Instance-owned. Override the gallery's CSS variables here. */
+:root {
+  --card-min-width: 17rem;
+  --grid-gap: 1.25rem;
+  --card-radius: 1rem;
+}

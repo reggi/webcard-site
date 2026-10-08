@@ -1,0 +1,64 @@
+name: Update webcard template
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Immutable upstream release tag (for example v0.1.0)
+        required: true
+        type: string
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: update-webcard-template
+  cancel-in-progress: false
+jobs:
+  update:
+    if: github.repository != 'reggi/webcard-site'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Activate pinned remote template
+        run: node scripts/init-instance.js
+      - name: Prepare reviewable update
+        env:
+          TEMPLATE_REF: ${{ inputs.ref }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! printf '%s' "$TEMPLATE_REF" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Expected a release tag such as v0.1.0" >&2
+            exit 1
+          fi
+          npx --no-install knitto-gh --ref "$TEMPLATE_REF" update "$GITHUB_WORKSPACE" --body-file "$RUNNER_TEMP/template-body"
+          npm install --package-lock-only --no-audit --no-fund
+          npm ci --no-audit --no-fund
+          npm run check
+          npx playwright install --with-deps chromium
+          npm run test:browser
+          npm run template:test
+      - name: Create update pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEMPLATE_REF: ${{ inputs.ref }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Instance already matches the selected template." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          branch="automation/webcard-template-$TEMPLATE_REF-$GITHUB_RUN_ID"
+          git switch --create "$branch"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --all
+          git commit -m "chore: update webcard template to $TEMPLATE_REF"
+          git push origin "$branch"
+          gh pr create --base "$DEFAULT_BRANCH" --head "$branch" --title "chore: update webcard template to $TEMPLATE_REF" --body-file "$RUNNER_TEMP/template-body"

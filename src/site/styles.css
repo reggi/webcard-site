@@ -1,0 +1,56 @@
+:root {
+  color-scheme: light;
+  --background: #f4f4f5;
+  --surface: #ffffff;
+  --text: #18181b;
+  --muted: #52525b;
+  --border: #d4d4d8;
+  --accent: #1d4ed8;
+  --font-family: system-ui, sans-serif;
+  --card-min-width: 17rem;
+  --grid-gap: 1.25rem;
+  --card-radius: 1rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --background: #18181b;
+    --surface: #27272a;
+    --text: #fafafa;
+    --muted: #a1a1aa;
+    --border: #52525b;
+    --accent: #93c5fd;
+  }
+}
+:root:where([data-theme="dark"]) {
+  color-scheme: dark;
+  --background: #18181b;
+  --surface: #27272a;
+  --text: #fafafa;
+  --muted: #a1a1aa;
+  --border: #52525b;
+  --accent: #93c5fd;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: auto; }
+body { margin: 0; background: var(--background); color: var(--text); font-family: var(--font-family); line-height: 1.5; }
+a { color: inherit; }
+a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+.skip-link { position: absolute; left: 1rem; top: -5rem; padding: .5rem 1rem; background: var(--surface); z-index: 1; }
+.skip-link:focus { top: 1rem; }
+.site-header, .gallery { max-width: 90rem; margin-inline: auto; padding-inline: clamp(1rem, 4vw, 3rem); }
+.site-header { padding-top: 3rem; padding-bottom: 2rem; }
+h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.2; overflow-wrap: anywhere; }
+.site-header p { color: var(--muted); max-width: 65ch; overflow-wrap: anywhere; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min-width)), 1fr)); gap: var(--grid-gap); align-items: start; padding-bottom: 3rem; }
+.gallery.masonry { grid-auto-rows: 8px; }
+.card { min-width: 0; }
+.card-inner { overflow: hidden; background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); }
+.image-link { display: block; }
+.card img { display: block; width: 100%; height: auto; }
+.card-text { padding: 1.25rem; overflow-wrap: anywhere; }
+.site-name, .source-url { color: var(--muted); font-size: .8rem; margin: 0; }
+h2 { font-size: 1.25rem; line-height: 1.3; margin: .4rem 0 .75rem; }
+h2 a { text-decoration-thickness: 1px; text-underline-offset: .15em; }
+.description { margin: 0 0 1rem; }
+.empty-state { grid-column: 1 / -1; color: var(--muted); }

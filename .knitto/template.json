@@ -1,0 +1,292 @@
+{
+  "engine": {
+    "package": "knitto",
+    "version": "0.3.0"
+  },
+  "name": "webcard-site",
+  "release": {
+    "provider": "release-please",
+    "tagFormat": "v{version}",
+    "version": "0.1.0"
+  },
+  "rules": [
+    {
+      "destination": ".github/workflows/add-webcard.yml",
+      "id": "file--github-workflows-add-webcard-yml",
+      "source": ".github/workflows/add-webcard.yml",
+      "type": "file"
+    },
+    {
+      "destination": ".github/workflows/deploy-pages.yml",
+      "id": "file--github-workflows-deploy-pages-yml",
+      "source": ".github/workflows/deploy-pages.yml",
+      "type": "file"
+    },
+    {
+      "destination": ".github/workflows/quality.yml",
+      "id": "file--github-workflows-quality-yml",
+      "source": ".github/workflows/quality.yml",
+      "type": "file"
+    },
+    {
+      "destination": ".github/workflows/update-template.yml",
+      "id": "file--github-workflows-update-template-yml",
+      "source": ".github/workflows/update-template.yml",
+      "type": "file"
+    },
+    {
+      "destination": ".gitignore",
+      "id": "file--gitignore",
+      "source": ".gitignore",
+      "type": "file"
+    },
+    {
+      "destination": ".nvmrc",
+      "id": "file--nvmrc",
+      "source": ".nvmrc",
+      "type": "file"
+    },
+    {
+      "destination": "LICENSE",
+      "id": "file-LICENSE",
+      "source": "LICENSE",
+      "type": "file"
+    },
+    {
+      "destination": "eslint.config.js",
+      "id": "file-eslint-config-js",
+      "source": "eslint.config.js",
+      "type": "file"
+    },
+    {
+      "destination": "index.html",
+      "id": "file-index-html",
+      "source": "index.html",
+      "type": "file"
+    },
+    {
+      "destination": "scripts/add-webcard.js",
+      "id": "file-scripts-add-webcard-js",
+      "source": "scripts/add-webcard.js",
+      "type": "file"
+    },
+    {
+      "destination": "scripts/build-site.js",
+      "id": "file-scripts-build-site-js",
+      "source": "scripts/build-site.js",
+      "type": "file"
+    },
+    {
+      "destination": "scripts/init-instance.js",
+      "id": "file-scripts-init-instance-js",
+      "source": "scripts/init-instance.js",
+      "type": "file"
+    },
+    {
+      "destination": "scripts/persist-card.js",
+      "id": "file-scripts-persist-card-js",
+      "source": "scripts/persist-card.js",
+      "type": "file"
+    },
+    {
+      "destination": "scripts/template-manifest.js",
+      "id": "file-scripts-template-manifest-js",
+      "source": "scripts/template-manifest.js",
+      "type": "file"
+    },
+    {
+      "destination": "scripts/test-template.js",
+      "id": "file-scripts-test-template-js",
+      "source": "scripts/test-template.js",
+      "type": "file"
+    },
+    {
+      "destination": "src/capture/capture.js",
+      "id": "file-src-capture-capture-js",
+      "source": "src/capture/capture.js",
+      "type": "file"
+    },
+    {
+      "destination": "src/capture/network.js",
+      "id": "file-src-capture-network-js",
+      "source": "src/capture/network.js",
+      "type": "file"
+    },
+    {
+      "destination": "src/site/masonry.js",
+      "id": "file-src-site-masonry-js",
+      "source": "src/site/masonry.js",
+      "type": "file"
+    },
+    {
+      "destination": "src/site/site.js",
+      "id": "file-src-site-site-js",
+      "source": "src/site/site.js",
+      "type": "file"
+    },
+    {
+      "destination": "src/site/styles.css",
+      "id": "file-src-site-styles-css",
+      "source": "src/site/styles.css",
+      "type": "file"
+    },
+    {
+      "destination": "src/webcard/collection.js",
+      "id": "file-src-webcard-collection-js",
+      "source": "src/webcard/collection.js",
+      "type": "file"
+    },
+    {
+      "destination": "src/webcard/format.js",
+      "id": "file-src-webcard-format-js",
+      "source": "src/webcard/format.js",
+      "type": "file"
+    },
+    {
+      "destination": "src/webcard/schemas/README.md",
+      "id": "file-src-webcard-schemas-README-md",
+      "source": "src/webcard/schemas/README.md",
+      "type": "file"
+    },
+    {
+      "destination": "src/webcard/schemas/asset.schema.json",
+      "id": "file-src-webcard-schemas-asset-schema-json",
+      "source": "src/webcard/schemas/asset.schema.json",
+      "type": "file"
+    },
+    {
+      "destination": "src/webcard/schemas/capture.schema.json",
+      "id": "file-src-webcard-schemas-capture-schema-json",
+      "source": "src/webcard/schemas/capture.schema.json",
+      "type": "file"
+    },
+    {
+      "destination": "src/webcard/schemas/webcard.schema.json",
+      "id": "file-src-webcard-schemas-webcard-schema-json",
+      "source": "src/webcard/schemas/webcard.schema.json",
+      "type": "file"
+    },
+    {
+      "destination": "tests/browser/gallery.test.js",
+      "id": "file-tests-browser-gallery-test-js",
+      "source": "tests/browser/gallery.test.js",
+      "type": "file"
+    },
+    {
+      "destination": "tests/capture.test.js",
+      "id": "file-tests-capture-test-js",
+      "source": "tests/capture.test.js",
+      "type": "file"
+    },
+    {
+      "destination": "tests/collection.test.js",
+      "id": "file-tests-collection-test-js",
+      "source": "tests/collection.test.js",
+      "type": "file"
+    },
+    {
+      "destination": "tests/fixtures/README.md",
+      "id": "file-tests-fixtures-README-md",
+      "source": "tests/fixtures/README.md",
+      "type": "file"
+    },
+    {
+      "destination": "tests/fixtures/spec-minimal/assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp",
+      "id": "file-tests-fixtures-spec-minimal-assets-sha256-01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412-webp",
+      "source": "tests/fixtures/spec-minimal/assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp",
+      "type": "file"
+    },
+    {
+      "destination": "tests/fixtures/spec-minimal/captures/20260924T042656.575Z.json",
+      "id": "file-tests-fixtures-spec-minimal-captures-20260924T042656-575Z-json",
+      "source": "tests/fixtures/spec-minimal/captures/20260924T042656.575Z.json",
+      "type": "file"
+    },
+    {
+      "destination": "tests/fixtures/spec-minimal/mimetype",
+      "id": "file-tests-fixtures-spec-minimal-mimetype",
+      "source": "tests/fixtures/spec-minimal/mimetype",
+      "type": "file"
+    },
+    {
+      "destination": "tests/fixtures/spec-minimal/webcard.json",
+      "id": "file-tests-fixtures-spec-minimal-webcard-json",
+      "source": "tests/fixtures/spec-minimal/webcard.json",
+      "type": "file"
+    },
+    {
+      "destination": "tests/format.test.js",
+      "id": "file-tests-format-test-js",
+      "source": "tests/format.test.js",
+      "type": "file"
+    },
+    {
+      "destination": "tests/helpers.js",
+      "id": "file-tests-helpers-js",
+      "source": "tests/helpers.js",
+      "type": "file"
+    },
+    {
+      "destination": "tests/persist.test.js",
+      "id": "file-tests-persist-test-js",
+      "source": "tests/persist.test.js",
+      "type": "file"
+    },
+    {
+      "destination": "tests/site.test.js",
+      "id": "file-tests-site-test-js",
+      "source": "tests/site.test.js",
+      "type": "file"
+    },
+    {
+      "destination": "vite.config.js",
+      "id": "file-vite-config-js",
+      "source": "vite.config.js",
+      "type": "file"
+    },
+    {
+      "destination": "package.json",
+      "exact": [
+        "/private",
+        "/type",
+        "/scripts",
+        "/engines",
+        "/dependencies",
+        "/devDependencies"
+      ],
+      "id": "package",
+      "parser": "package-json",
+      "template": "files/package.json.hbs",
+      "type": "content"
+    },
+    {
+      "destination": "site.config.json",
+      "id": "initial-site-config-json",
+      "ifMissing": true,
+      "source": "site.config.json",
+      "type": "file"
+    },
+    {
+      "destination": "theme.css",
+      "id": "initial-theme-css",
+      "ifMissing": true,
+      "source": "theme.css",
+      "type": "file"
+    },
+    {
+      "destination": "cards/collection.json",
+      "id": "initial-cards-collection-json",
+      "ifMissing": true,
+      "source": "cards/collection.json",
+      "type": "file"
+    },
+    {
+      "destination": "README.md",
+      "id": "initial-README-md",
+      "ifMissing": true,
+      "source": "README.md",
+      "type": "file"
+    }
+  ],
+  "schemaVersion": 1
+}

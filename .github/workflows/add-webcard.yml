@@ -1,0 +1,105 @@
+name: Add webcard
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Public HTTP(S) website URL
+        required: true
+        type: string
+      refresh:
+        description: Explicitly refresh a cached card, preserving history
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: webcard-ingestion
+  cancel-in-progress: false
+jobs:
+  capture:
+    if: github.repository != 'reggi/webcard-site' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Capture or reuse card
+        env:
+          CARD_URL: ${{ inputs.url }}
+          CARD_REFRESH: ${{ inputs.refresh }}
+          CARD_OUTPUT: ${{ runner.temp }}/capture
+        run: npm run card:add
+      - uses: actions/upload-artifact@v4
+        with:
+          name: captured-webcard
+          path: ${{ runner.temp }}/capture
+          retention-days: 1
+          if-no-files-found: error
+  persist:
+    needs: capture
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - uses: actions/download-artifact@v4
+        with:
+          name: captured-webcard
+          path: ${{ runner.temp }}/capture
+      - name: Validate, commit, and push without overwriting newer content
+        env:
+          CAPTURE_PATH: ${{ runner.temp }}/capture
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          node scripts/persist-card.js "$CAPTURE_PATH"
+          if [ -n "$(git status --porcelain -- cards/)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -- cards/
+            git commit -m "chore: save webcard"
+            pushed=false
+            for attempt in 1 2 3; do
+              echo "Push attempt $attempt"
+              if git push origin "HEAD:$DEFAULT_BRANCH"; then
+                pushed=true
+                break
+              fi
+              git fetch origin "$DEFAULT_BRANCH"
+              git rebase "origin/$DEFAULT_BRANCH"
+            done
+            if [ "$pushed" != true ]; then
+              echo "Could not push after three attempts; rerun dispatch." >&2
+              exit 1
+            fi
+          fi
+          {
+            echo "## Webcard saved"
+            echo
+            echo "Revision: $(git rev-parse HEAD)"
+            echo
+            cat "$CAPTURE_PATH/result.json"
+          } >> "$GITHUB_STEP_SUMMARY"
+  deploy:
+    needs: persist
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/deploy-pages.yml
