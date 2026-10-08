@@ -111,6 +111,25 @@ test('invalid metadata image triggers screenshot rather than a success-shaped br
     if (request.url === '/broken') { response.writeHead(200, { 'content-type': 'image/png' }); response.end('not an image'); }
     else { response.writeHead(200, { 'content-type': 'text/html' }); response.end('<title>Broken preview</title><meta property="og:image" content="/broken">'); }
   });
+
+  test('SVG metadata images are not passed to a filesystem-capable image renderer', async (t) => {
+    const server = await fixtureServer((request, response) => {
+      if (request.url === '/vector') {
+        response.writeHead(200, { 'content-type': 'image/svg+xml' });
+        response.end('<svg xmlns="http://www.w3.org/2000/svg"><image href="file:///etc/passwd"/></svg>');
+      } else {
+        response.writeHead(200, { 'content-type': 'text/html' });
+        response.end('<title>Vector preview</title><meta property="og:image" content="/vector">');
+      }
+    });
+    t.after(server.close);
+    const warnings = [];
+    const card = await readArchive(await captureURL(server.url, undefined, {
+      networkOptions: { testLoopback: true }, warn: (message) => warnings.push(message)
+    }));
+    assert.ok(warnings.some((message) => message.includes('raster previews')));
+    assert.equal(card.current.image.mediaType, 'image/webp');
+  });
   t.after(server.close);
   const warnings = [];
   const card = await readArchive(await captureURL(server.url, undefined, {

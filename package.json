@@ -1,6 +1,6 @@
 {
   "name": "webcard-site",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "description": "A portable Webcard gallery generated as static HTML with Vite.",

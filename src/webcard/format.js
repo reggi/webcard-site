@@ -28,7 +28,7 @@ const schema = (name) => ajv.getSchema(`https://webcard.app/spec/1.0.0/schemas/$
 export const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 export function sourceURL(value) {
-  if (typeof value !== 'string' || value !== value.trim() || !/^https?:\/\//i.test(value)) {
+  if (typeof value !== 'string' || /[\u0000-\u0020\u007f]/.test(value) || !/^https?:\/\//i.test(value)) {
     throw new Error('Expected an absolute HTTP(S) URL without surrounding whitespace');
   }
   const url = new URL(value);

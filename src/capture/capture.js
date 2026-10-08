@@ -41,6 +41,13 @@ export function extractMetadata(html, pageURL, warn = console.warn) {
 }
 
 async function webp(bytes) {
+  const signature = bytes.subarray(0, 12);
+  const raster = signature.subarray(0, 3).equals(Buffer.from([0xff, 0xd8, 0xff]))
+    || signature.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
+    || /^GIF8[79]a/.test(signature.toString('ascii'))
+    || (signature.subarray(0, 4).toString() === 'RIFF' && signature.subarray(8, 12).toString() === 'WEBP')
+    || (signature.subarray(4, 8).toString() === 'ftyp' && ['avif', 'avis'].includes(signature.subarray(8, 12).toString()));
+  if (!raster) throw new Error('Only JPEG, PNG, WebP, GIF, and AVIF raster previews are supported');
   const image = sharp(bytes, { limitInputPixels: LIMITS.pixels, failOn: 'warning' });
   const metadata = await image.metadata();
   if (metadata.pages > 1) throw new Error('Animated images are not supported');

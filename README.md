@@ -89,6 +89,9 @@ with the hostname as a last-resort title/site name and an empty description if
 absent. A usable preview image becomes WebP. Without one, a bounded
 1200×900 Playwright screenshot becomes the image. Optional icons are saved when
 usable; failures and fallbacks produce warnings. No AI service is involved.
+Preview decoding accepts bounded raster images (JPEG, PNG, WebP, GIF, AVIF).
+SVG previews use screenshot fallback rather than a filesystem-capable SVG
+renderer; unsupported optional icons produce a warning.
 
 Only public HTTP(S) destinations without URL credentials are permitted.
 Redirects, image downloads, and browser HTTP subresources all pass through the
@@ -183,7 +186,7 @@ README is initialized only if missing.
 
 Enable **Settings → Actions → General → Allow GitHub Actions to create and
 approve pull requests** before running **Update webcard template** with a
-published tag such as `v0.1.2`. The workflow validates the new code and browser
+published tag such as `v0.1.3`. The workflow validates the new code and browser
 behavior before opening an update PR. GitHub-token-authored PRs do not
 automatically trigger other workflows, which is why validation runs explicitly
 before PR creation.
@@ -191,7 +194,7 @@ before PR creation.
 Locally:
 
 ```sh
-npx --no-install knitto source pin . --ref v0.1.2
+npx --no-install knitto source pin . --ref v0.1.3
 npx --no-install knitto plan . --update
 npx --no-install knitto apply . --update
 npm install --package-lock-only

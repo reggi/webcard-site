@@ -67,7 +67,7 @@ test('URL identity does not strip query, fragment, or merge by canonical URL', (
   assert.notEqual(cardID('https://example.com/?a=1'), cardID('https://example.com/?a=2'));
   assert.notEqual(cardID('https://example.com/#a'), cardID('https://example.com/#b'));
   assert.equal(cardID('https://EXAMPLE.com:443/'), cardID('https://example.com/'));
-  for (const value of ['https://user:pass@example.com/', 'file:///tmp/a', '/relative', ' https://example.com/']) {
+  for (const value of ['https://user:pass@example.com/', 'file:///tmp/a', '/relative', ' https://example.com/', 'https://exam\nple.com/']) {
     assert.throws(() => sourceURL(value));
   }
 });
