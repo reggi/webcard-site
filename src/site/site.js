@@ -23,7 +23,8 @@ export function validateConfig(config, environment = process.env) {
     if (url.search || url.hash) throw new Error('siteURL must not contain a query or fragment');
     if (!url.pathname.endsWith('/')) url.pathname += '/';
   }
-  const base = config.base || (config.siteURL ? url.pathname : environment.BASE_PATH || url?.pathname || '/');
+  const pagesBase = environment.BASE_PATH ? `${environment.BASE_PATH.replace(/\/$/, '')}/` : '';
+  const base = config.base || (config.siteURL ? url.pathname : pagesBase || url?.pathname || '/');
   if (!/^\/(?:[^?#\\\s]*\/)?$/.test(base) || base.includes('//')
     || base.split('/').some((part) => part === '.' || part === '..')) {
     throw new Error('base must be an absolute URL path beginning and ending with /');

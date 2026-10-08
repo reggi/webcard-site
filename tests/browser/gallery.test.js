@@ -31,7 +31,9 @@ test('production root/project builds contain complete HTML and work without JS a
   const browser = await chromium.launch();
   t.after(() => browser.close());
   for (const base of ['/', '/project/']) {
-    const site = await prepareSite(root, { SITE_URL: `https://cards.example${base}`, BASE_PATH: base });
+    const site = await prepareSite(root, {
+      SITE_URL: `https://cards.example${base.slice(0, -1)}`, BASE_PATH: base.slice(0, -1)
+    });
     await build({
       configFile: false, root, base, publicDir: '.generated/public', logLevel: 'error',
       plugins: [{

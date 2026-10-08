@@ -13,6 +13,8 @@ export const config = { title: 'My cards', description: 'Saved links', language:
 test('configuration derives root/project bases and explicit URL takes precedence', () => {
   assert.equal(validateConfig(config, {}).base, '/');
   assert.equal(validateConfig(config, { SITE_URL: 'https://owner.github.io/project/', BASE_PATH: '/project/' }).base, '/project/');
+  assert.equal(validateConfig(config, { SITE_URL: 'https://owner.github.io/project', BASE_PATH: '/project' }).base, '/project/');
+  assert.equal(validateConfig(config, { SITE_URL: 'https://owner.github.io', BASE_PATH: '' }).base, '/');
   assert.equal(validateConfig({ ...config, siteURL: 'https://cards.example/' }, { BASE_PATH: '/project/' }).base, '/');
   for (const invalid of [{ theme: 'automatic' }, { base: '/x' }, { base: '/../' }, { language: 'en" onclick="' }, { siteURL: 'https://example.com/?query=1' }, { siteURL: 'https://example.com/', base: '/x/' }]) {
     assert.throws(() => validateConfig({ ...config, ...invalid }, {}));
