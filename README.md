@@ -183,7 +183,7 @@ README is initialized only if missing.
 
 Enable **Settings → Actions → General → Allow GitHub Actions to create and
 approve pull requests** before running **Update webcard template** with a
-published tag such as `v0.1.1`. The workflow validates the new code and browser
+published tag such as `v0.1.2`. The workflow validates the new code and browser
 behavior before opening an update PR. GitHub-token-authored PRs do not
 automatically trigger other workflows, which is why validation runs explicitly
 before PR creation.
@@ -191,7 +191,7 @@ before PR creation.
 Locally:
 
 ```sh
-npx --no-install knitto source pin . --ref v0.1.1
+npx --no-install knitto source pin . --ref v0.1.2
 npx --no-install knitto plan . --update
 npx --no-install knitto apply . --update
 npm install --package-lock-only

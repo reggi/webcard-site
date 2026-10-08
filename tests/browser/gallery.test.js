@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { copyFile, mkdir, readFile, rm } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import test from 'node:test';
 import { build } from 'vite';
@@ -14,7 +14,10 @@ import { archive, fixtureServer, image, temporaryCollection } from '../helpers.j
 test('production root/project builds contain complete HTML and work without JS at all breakpoints', async (t) => {
   const { root, cards } = await temporaryCollection();
   t.after(() => rm(root, { recursive: true }));
-  await copyFile('site.config.json', join(root, 'site.config.json'));
+  await writeFile(join(root, 'site.config.json'), JSON.stringify({
+    title: 'Fixture cards', description: 'Fixture collection', language: 'en',
+    theme: 'system', siteURL: '', base: ''
+  }));
   await copyFile('theme.css', join(root, 'theme.css'));
   await copyFile('index.html', join(root, 'index.html'));
   await mkdir(join(root, 'src/site'), { recursive: true });

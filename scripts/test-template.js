@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -60,7 +60,11 @@ if (!manifest) {
     assert.ok((await readFile(join(consumer, '.knitto.lock'), 'utf8')).includes('sha256:'));
     const fixture = 'tests/fixtures/spec-minimal/assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp.base64';
     assert.ok((await readFile(join(root, fixture))).equals(await readFile(join(consumer, fixture))));
+    await symlink(join(root, 'node_modules'), join(consumer, 'node_modules'), 'dir');
+    execFileSync('npm', ['test'], { cwd: consumer, encoding: 'utf8' });
+    execFileSync('npm', ['run', 'test:browser'], { cwd: consumer, encoding: 'utf8' });
     console.log('Template bootstrap, upgrade, rollback, owned metadata/theme/cards, and digest lock verified');
+    console.log('Generated consumer unit and browser suites passed with non-default instance configuration');
   } finally {
     await rm(consumer, { recursive: true });
     await rm(snapshot, { recursive: true });
