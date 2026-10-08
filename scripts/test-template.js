@@ -22,6 +22,7 @@ if (!manifest) {
     const definition = JSON.parse(manifest);
     await writeFile(join(snapshot, 'template.json'), manifest);
     for (const rule of definition.rules) {
+      if (rule.type === 'delete') continue;
       const from = rule.source ? join(root, rule.source) : join(root, '.knitto', rule.template);
       const to = join(snapshot, rule.source ?? rule.template);
       await mkdir(join(to, '..'), { recursive: true });
@@ -57,6 +58,8 @@ if (!manifest) {
     assert.equal(pkg.description, 'Instance-owned');
     assert.equal(pkg.scripts.build, 'node scripts/build-site.js');
     assert.ok((await readFile(join(consumer, '.knitto.lock'), 'utf8')).includes('sha256:'));
+    const fixture = 'tests/fixtures/spec-minimal/assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp.base64';
+    assert.ok((await readFile(join(root, fixture))).equals(await readFile(join(consumer, fixture))));
     console.log('Template bootstrap, upgrade, rollback, owned metadata/theme/cards, and digest lock verified');
   } finally {
     await rm(consumer, { recursive: true });

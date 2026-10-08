@@ -7,9 +7,14 @@
   "release": {
     "provider": "release-please",
     "tagFormat": "v{version}",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "rules": [
+    {
+      "destination": "tests/fixtures/spec-minimal/assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp",
+      "id": "remove-old-binary-test-fixture",
+      "type": "delete"
+    },
     {
       "destination": ".github/workflows/add-webcard.yml",
       "id": "file--github-workflows-add-webcard-yml",
@@ -191,9 +196,9 @@
       "type": "file"
     },
     {
-      "destination": "tests/fixtures/spec-minimal/assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp",
-      "id": "file-tests-fixtures-spec-minimal-assets-sha256-01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412-webp",
-      "source": "tests/fixtures/spec-minimal/assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp",
+      "destination": "tests/fixtures/spec-minimal/assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp.base64",
+      "id": "file-tests-fixtures-spec-minimal-assets-sha256-01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412-webp-base64",
+      "source": "tests/fixtures/spec-minimal/assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp.base64",
       "type": "file"
     },
     {

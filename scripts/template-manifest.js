@@ -27,6 +27,10 @@ const manifest = {
   engine: { package: 'knitto', version: '0.3.0' },
   release: { provider: 'release-please', version: pkg.version, tagFormat: 'v{version}' },
   rules: [
+    {
+      id: 'remove-old-binary-test-fixture', type: 'delete',
+      destination: 'tests/fixtures/spec-minimal/assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp'
+    },
     ...paths.map((path) => ({ id: `file-${path.replaceAll(/[^a-zA-Z0-9-]/g, '-')}`, type: 'file', source: path, destination: path })),
     {
       id: 'package', type: 'content', parser: 'package-json',

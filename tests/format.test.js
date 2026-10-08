@@ -148,7 +148,11 @@ test('published Webcard 1.0.0 minimal example interoperates without rewriting me
     'assets/sha256/01ccfcbb2f0635b02dc28020140fae2e23466f5c8a0b431d968b5898dd926412.webp'
   ];
   const entries = new Map();
-  for (const name of names) entries.set(name, await readFile(new URL(`./fixtures/spec-minimal/${name}`, import.meta.url)));
+  for (const name of names) {
+    const binary = name.endsWith('.webp');
+    const bytes = await readFile(new URL(`./fixtures/spec-minimal/${name}${binary ? '.base64' : ''}`, import.meta.url));
+    entries.set(name, binary ? Buffer.from(bytes.toString('utf8').trim(), 'base64') : bytes);
+  }
   entries.set('mimetype', Buffer.from(entries.get('mimetype').toString().trimEnd()));
   const result = await readArchive(await writeArchive(entries));
   assert.equal(result.root.formatVersion, '1.0.0');
