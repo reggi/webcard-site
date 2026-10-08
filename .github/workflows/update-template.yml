@@ -26,9 +26,34 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - name: Detect an already-current instance
+        id: current
+        env:
+          TEMPLATE_REF: ${{ inputs.ref }}
+        run: |
+          if ! printf '%s' "$TEMPLATE_REF" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Expected an immutable release tag" >&2
+            exit 1
+          fi
+          configured_ref="$(node -p 'JSON.parse(require("fs").readFileSync(".knitto.json", "utf8")).source.ref')"
+          if [ "$configured_ref" = "$TEMPLATE_REF" ] && [ ! -d .knitto ] && [ -f .knitto.lock ]; then
+            if npx --no-install knitto check --quiet; then
+              echo "current=true" >> "$GITHUB_OUTPUT"
+              echo "Instance already matches the selected template." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            else
+              status=$?
+              if [ "$status" -ne 1 ]; then
+                exit "$status"
+              fi
+            fi
+          fi
+          echo "current=false" >> "$GITHUB_OUTPUT"
       - name: Activate pinned remote template
+        if: steps.current.outputs.current != 'true'
         run: node scripts/init-instance.js
       - name: Prepare reviewable update
+        if: steps.current.outputs.current != 'true'
         env:
           TEMPLATE_REF: ${{ inputs.ref }}
           GH_TOKEN: ${{ github.token }}
@@ -45,6 +70,7 @@ jobs:
           npm run test:browser
           npm run template:test
       - name: Create update pull request
+        if: steps.current.outputs.current != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           TEMPLATE_REF: ${{ inputs.ref }}
